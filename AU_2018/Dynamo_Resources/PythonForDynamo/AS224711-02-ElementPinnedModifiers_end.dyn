@@ -1,0 +1,351 @@
+{
+  "Uuid": "0cee7846-332e-4ec0-9977-ec8f1321d203",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "AS224711-02-ElementPinnedModifiers_end",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [
+        "9e597f98-694d-4ada-b8ef-0e7459e0b930-0002472d"
+      ],
+      "Id": "664d0fcc5a834c91b2fd0be87ecb547e",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "21dd804a7b0a4ef7be38ab3fb3ce4f02",
+          "Name": "Element",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python template for Revit\r\nimport clr\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference('System')\r\nfrom System.Collections.Generic import List\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\nclr.AddReference('RevitServices')\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\n#Preparing input from dynamo to revit\r\nelement = UnwrapElement(IN[0])\r\n\r\n#Do some action in a Transaction\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = element",
+      "VariableInputPorts": true,
+      "Id": "e951b3a72d4e4be9a4577372061c7975",
+      "Inputs": [
+        {
+          "Id": "e6fbc26447514bc19468af19b9c467c9",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "d127c376af0547e994d3e4d2b9509cbc",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.ZeroTouch.DSFunction, DynamoCore",
+      "NodeType": "FunctionNode",
+      "FunctionSignature": "DSCore.List.Flatten@var[]..[],int",
+      "Id": "3ea01b1dca6548acaae2849fe9bfc792",
+      "Inputs": [
+        {
+          "Id": "abbdba442d634733a656b519c09fad61",
+          "Name": "list",
+          "Description": "List to flatten.\n\nvar[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "983922c624244bd291caf7fea09c6ca9",
+          "Name": "amt",
+          "Description": "Layers of nesting to remove.\n\nint\nDefault value : -1",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "a43f10abdc444ae78cdb8685c84fcea0",
+          "Name": "var[]..[]",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Flattens a nested list of lists by a certain amount.\n\nList.Flatten (list: var[]..[], amt: int = -1): var[]..[]"
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python template for Revit\r\nimport clr\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference('System')\r\nfrom System.Collections.Generic import List\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\nclr.AddReference('RevitServices')\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\n#Preparing input from dynamo to revit\r\nelements = UnwrapElement(IN[0])\r\ntoggle = IN[1]\r\n\r\n#List to output results\r\nresults = []\r\n#Do some action in a Transaction\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nfor i in elements:\r\n\ti.Pinned = toggle\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = elements",
+      "VariableInputPorts": true,
+      "Id": "931934f8a2f443d88c84f4b4180c0845",
+      "Inputs": [
+        {
+          "Id": "132703fae6cc44609ace2f4258787988",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ed198f43851d44cd9dac36459efc69ab",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "ba382acaa34643b6b920f44b68fe03ea",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "86876623d52a4d82bf76425f3a107c9c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d4feee1eadd24b09be88d3a6ac6f39cc",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python template for Revit\r\nimport clr\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference('System')\r\nfrom System.Collections.Generic import List\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\nclr.AddReference('RevitServices')\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\n#Preparing input from dynamo to revit\r\nelements = UnwrapElement(IN[0])\r\ntoggle = IN[1]\r\n\r\n#List to output results\r\nresults = []\r\n#Do some action in a Transaction\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nfor i in elements:\r\n\tif toggle == None:\r\n\t\tresults.append(i.Pinned)\t\t\r\n\telse:\r\n\t\ti.Pinned = toggle\r\n\t\tresults.append(i)\r\n\t\t\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = results",
+      "VariableInputPorts": true,
+      "Id": "d3eb0e818761429d8145e6a449732216",
+      "Inputs": [
+        {
+          "Id": "faf14bc120d24c629d20814b4ac1e69a",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "82cb4e892ba24bca97ae7e79cc8d413c",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "51b808a602cf4763b649ffdb1f95c7f8",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.BoolSelector, CoreNodeModels",
+      "NodeType": "BooleanInputNode",
+      "InputValue": false,
+      "Id": "2fa0697e444d4afbb99d0b83eeadf508",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "9f16ea7b18d146499d0c9be8c7ab00e2",
+          "Name": "",
+          "Description": "Boolean",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Selection between a true and false."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "21dd804a7b0a4ef7be38ab3fb3ce4f02",
+      "End": "abbdba442d634733a656b519c09fad61",
+      "Id": "8a0b74c007134c10b898809ff3cdc166"
+    },
+    {
+      "Start": "a43f10abdc444ae78cdb8685c84fcea0",
+      "End": "e6fbc26447514bc19468af19b9c467c9",
+      "Id": "677196e2948141fbb321f688c57df6e8"
+    },
+    {
+      "Start": "a43f10abdc444ae78cdb8685c84fcea0",
+      "End": "132703fae6cc44609ace2f4258787988",
+      "Id": "ea496991526c4f4989961f8490c604c7"
+    },
+    {
+      "Start": "a43f10abdc444ae78cdb8685c84fcea0",
+      "End": "faf14bc120d24c629d20814b4ac1e69a",
+      "Id": "4ee17aef08c0451196358317f351624f"
+    },
+    {
+      "Start": "d4feee1eadd24b09be88d3a6ac6f39cc",
+      "End": "ed198f43851d44cd9dac36459efc69ab",
+      "Id": "5a6f7ee2d2ae434e9199fc7a0339da0d"
+    }
+  ],
+  "Dependencies": [],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Select Model Element",
+        "Id": "664d0fcc5a834c91b2fd0be87ecb547e",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 301.94307040760316,
+        "Y": 349.02283700211643
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script - Pinned Status (Get)",
+        "Id": "e951b3a72d4e4be9a4577372061c7975",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 978.02747242299881,
+        "Y": 155.25240829384151
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "List.Flatten",
+        "Id": "3ea01b1dca6548acaae2849fe9bfc792",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 490.0697471482996,
+        "Y": 349.02283700211643
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script - Pinned Status (Set)",
+        "Id": "931934f8a2f443d88c84f4b4180c0845",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 978.02747242299881,
+        "Y": 349.02283700211643
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "86876623d52a4d82bf76425f3a107c9c",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 821.33422532229827,
+        "Y": 412.8861979508531
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script - Pinned Status (Get + Set)",
+        "Id": "d3eb0e818761429d8145e6a449732216",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 978.02747242299881,
+        "Y": 576.33763484393262
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Boolean",
+        "Id": "2fa0697e444d4afbb99d0b83eeadf508",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 807.03597680366852,
+        "Y": 633.253842296427
+      }
+    ],
+    "Annotations": [],
+    "X": -97.133228122225546,
+    "Y": -83.1528727850764,
+    "Zoom": 1.0733712109599651
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "Uuid": "e4157106-93b8-4c6b-b078-c2f866685f34",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "AS224711-00-GetCurrentUserPythonTemplatePath_end",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "import sys\r\n\r\npyt_path = r'C:\\Program Files (x86)\\IronPython 2.7\\Lib'\r\nsys.path.append(pyt_path)\r\n\r\nimport os\r\n\r\nusername = os.environ.get( \"USERNAME\" )\r\n\r\nOUT = \"C:\\\\Users\\\\\" + username + \"\\\\AppData\\\\Roaming\\\\Dynamo\\\\Dynamo Revit\\\\2.0\\\\PythonTemplate.py\"",
+      "VariableInputPorts": true,
+      "Id": "7c4b4450a9a14bb898a30e61bd6e7f04",
+      "Inputs": [
+        {
+          "Id": "387b16eaa73144d1a6f5f7506bfdad56",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "c7534553331d48909ca63a7eb3a582d7",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "ef128413-8fd0-410f-9447-dfd84dfe29e3",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "32101ac9b47945d0a6e17c6a7e4862b1",
+      "Inputs": [
+        {
+          "Id": "c5d5ce969fb84708aa0a8b626d4774d6",
+          "Name": "str",
+          "Description": "string",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "439c524f2aca4c9c9185e2dd400e330f",
+          "Name": "str",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Copies a string to the clipboard. "
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "c7534553331d48909ca63a7eb3a582d7",
+      "End": "c5d5ce969fb84708aa0a8b626d4774d6",
+      "Id": "f3f718e5ab5647ad93925039a1c626a6"
+    }
+  ],
+  "Dependencies": [
+    "ef128413-8fd0-410f-9447-dfd84dfe29e3"
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "7c4b4450a9a14bb898a30e61bd6e7f04",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 346.0,
+        "Y": 230.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Clipboard.SendTo",
+        "Id": "32101ac9b47945d0a6e17c6a7e4862b1",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 519.0,
+        "Y": 228.0
+      }
+    ],
+    "Annotations": [],
+    "X": 0.0,
+    "Y": 0.0,
+    "Zoom": 1.0
+  }
+}

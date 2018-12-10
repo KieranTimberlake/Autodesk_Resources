@@ -1,0 +1,178 @@
+{
+  "Uuid": "0cee7846-332e-4ec0-9977-ec8f1321d203",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "AS224711-02-ShowHideGridBubbles_end",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python template for Revit\r\nimport clr\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference('System')\r\nfrom System.Collections.Generic import List\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\nclr.AddReference('RevitServices')\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\nactiveView = doc.ActiveView\r\n\r\n#Preparing input from dynamo to revit\r\nelements = UnwrapElement(IN[0])\r\n\r\n#We need a transaction because we are making a change to the Revit model\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nfor i in elements:\r\n\ti.ShowBubbleInView(DatumEnds.End1,activeView) #Show end 1 in the view\r\n\ti.HideBubbleInView(DatumEnds.End0,activeView) # hide end 0 in the view\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = elements",
+      "VariableInputPorts": true,
+      "Id": "189397509ab947b8a2defa5128815ce7",
+      "Inputs": [
+        {
+          "Id": "660875a8b13241fbae69750f2326b8d8",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "8cd73f54f1a340d289cde88bdf142c80",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "9dba20d5-ee3a-4fad-ae88-9b859fff9cb7",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "46072e68e7314505986fe4ffb57035dc",
+      "Inputs": [
+        {
+          "Id": "87a3f0790bfd4cc8927384302b9fef20",
+          "Name": "refresh",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ed952caef36c45679cbc99e151d8511d",
+          "Name": "Category",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "aec039abbf214e7b8aa2b6b03274ed07",
+          "Name": "elements",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "This allows a multiple selection of elements of specified category."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 233,
+      "NodeType": "ExtensionNode",
+      "Id": "f3df4d9bc720441f992f9d18fd3405a2",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d44f8d77120b461a99ada090382df513",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "aec039abbf214e7b8aa2b6b03274ed07",
+      "End": "660875a8b13241fbae69750f2326b8d8",
+      "Id": "502418df2fd944d688fc03a629241944"
+    },
+    {
+      "Start": "d44f8d77120b461a99ada090382df513",
+      "End": "ed952caef36c45679cbc99e151d8511d",
+      "Id": "13b80f91dcdd4d58a61db00813bd19f0"
+    }
+  ],
+  "Dependencies": [
+    "9dba20d5-ee3a-4fad-ae88-9b859fff9cb7"
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "189397509ab947b8a2defa5128815ce7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 659.96760259179268,
+        "Y": 257.61987041036718
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Isolated Pick Model Elements",
+        "Id": "46072e68e7314505986fe4ffb57035dc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 351.7624190064796,
+        "Y": 257.61987041036718
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "f3df4d9bc720441f992f9d18fd3405a2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 119.0,
+        "Y": 283.61987041036718
+      }
+    ],
+    "Annotations": [],
+    "X": 304.0,
+    "Y": 1.0,
+    "Zoom": 1.1575
+  }
+}

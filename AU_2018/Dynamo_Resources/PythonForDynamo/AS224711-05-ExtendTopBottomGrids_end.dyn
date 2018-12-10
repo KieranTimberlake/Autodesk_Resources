@@ -1,0 +1,302 @@
+{
+  "Uuid": "3c9d0464-8643-5ffe-96e5-ab1769818209",
+  "IsCustomNode": false,
+  "Description": "",
+  "Name": "AS224711-05-ExtendTopBottomGrids_end",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [
+    {
+      "Id": "30fcc09ee0db441fad3497c57f693c0c",
+      "Name": "Top",
+      "Type": "number",
+      "Value": "25.6",
+      "MaximumValue": 100.0,
+      "MinimumValue": -100.0,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "Id": "39bb04df2d8c4adfb319c02ae0d55c45",
+      "Name": "Bottom",
+      "Type": "number",
+      "Value": "-67.6",
+      "MaximumValue": 100.0,
+      "MinimumValue": -100.0,
+      "StepValue": 0.1,
+      "NumberType": "Double",
+      "Description": "A slider that produces numeric values."
+    }
+  ],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python template for Revit\nimport clr\n\nclr.AddReference('RevitAPI')\nfrom Autodesk.Revit.DB import *\nfrom Autodesk.Revit.DB.Structure import *\n\nclr.AddReference('RevitAPIUI')\nfrom Autodesk.Revit.UI import *\n\nclr.AddReference('System')\nfrom System.Collections.Generic import List\n\nclr.AddReference('RevitNodes')\nimport Revit\nclr.ImportExtensions(Revit.GeometryConversion)\nclr.ImportExtensions(Revit.Elements)\n\nclr.AddReference('RevitServices')\nimport RevitServices\nfrom RevitServices.Persistence import DocumentManager\nfrom RevitServices.Transactions import TransactionManager\n\ndoc = DocumentManager.Instance.CurrentDBDocument\nuidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\n\n#Preparing input from dynamo to revit\ngrids = UnwrapElement(IN[0])\nbottom = IN[1]\ntop = IN[2]\n\n#Do some action in a Transaction\nTransactionManager.Instance.EnsureInTransaction(doc)\nfor g in grids:\n\tg.SetVerticalExtents(bottom,top)\n\nTransactionManager.Instance.TransactionTaskDone()\n\nOUT = grids",
+      "VariableInputPorts": true,
+      "Id": "0af41ffd637b4e5e8fe91836f8e552a3",
+      "Inputs": [
+        {
+          "Id": "79b18aafc6034f91b4409b2b0150d81f",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "54ca9331dd064696a8cfe9281a582a8a",
+          "Name": "IN[1]",
+          "Description": "Input #1",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "2e706030ff23440597dbb78fa322f832",
+          "Name": "IN[2]",
+          "Description": "Input #2",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "e8ee7dd79b3b406cbe6bcc4bb9bd299e",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    },
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "cd09ad33-8c34-4850-ac26-24448d92c38f",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "44356af9eec84817a8f552d06e97b7e7",
+      "Inputs": [
+        {
+          "Id": "32c674effff14cb69b952f50a4fc035f",
+          "Name": "unknownItem",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "171e1bc2007c40f0b2d722d55985336b",
+          "Name": "seq",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "Turns an element (or a nested list) into a flat list"
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "MaximumValue": 100.0,
+      "MinimumValue": -100.0,
+      "StepValue": 0.1,
+      "InputValue": 25.6,
+      "Id": "30fcc09ee0db441fad3497c57f693c0c",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "3ae61efbf7bb4b4c9052b08d3a341332",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "ConcreteType": "CoreNodeModels.Input.DoubleSlider, CoreNodeModels",
+      "NodeType": "NumberInputNode",
+      "NumberType": "Double",
+      "MaximumValue": 100.0,
+      "MinimumValue": -100.0,
+      "StepValue": 0.1,
+      "InputValue": -67.6,
+      "Id": "39bb04df2d8c4adfb319c02ae0d55c45",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "79e180a1924d4a8d90c9d96f3042d3d4",
+          "Name": "",
+          "Description": "Double",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "A slider that produces numeric values."
+    },
+    {
+      "ConcreteType": "Dynamo.Nodes.DSModelElementsSelection, DSRevitNodesUI",
+      "NodeType": "ExtensionNode",
+      "InstanceId": [],
+      "Id": "6c61cb972ce24d71b0d59b6b0b16aaa0",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "cf1d86b424954510b853af236da55d8a",
+          "Name": "Elements",
+          "Description": "The selected elements.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled"
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "171e1bc2007c40f0b2d722d55985336b",
+      "End": "79b18aafc6034f91b4409b2b0150d81f",
+      "Id": "3a5b6298bb6b404589e45ef9356e904b"
+    },
+    {
+      "Start": "3ae61efbf7bb4b4c9052b08d3a341332",
+      "End": "2e706030ff23440597dbb78fa322f832",
+      "Id": "f095e918021c4a648b2e868b07612535"
+    },
+    {
+      "Start": "79e180a1924d4a8d90c9d96f3042d3d4",
+      "End": "54ca9331dd064696a8cfe9281a582a8a",
+      "Id": "73c5c0995a924e3d94aec42098700c14"
+    },
+    {
+      "Start": "cf1d86b424954510b853af236da55d8a",
+      "End": "32c674effff14cb69b952f50a4fc035f",
+      "Id": "136e4619cd994880aabf4e1dda3ab36a"
+    }
+  ],
+  "Dependencies": [
+    "cd09ad33-8c34-4850-ac26-24448d92c38f"
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": false,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Manual",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "0af41ffd637b4e5e8fe91836f8e552a3",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 705.0,
+        "Y": 433.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "TurnIntoList",
+        "Id": "44356af9eec84817a8f552d06e97b7e7",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 271.0,
+        "Y": 386.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Top",
+        "Id": "30fcc09ee0db441fad3497c57f693c0c",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 271.0,
+        "Y": 596.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Bottom",
+        "Id": "39bb04df2d8c4adfb319c02ae0d55c45",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 271.0,
+        "Y": 514.0
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Select Model Elements",
+        "Id": "6c61cb972ce24d71b0d59b6b0b16aaa0",
+        "IsSetAsInput": true,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": -3.0,
+        "Y": 386.0
+      }
+    ],
+    "Annotations": [
+      {
+        "Id": "738f336f513c401b8f1bf638f3ba3f45",
+        "Title": "**Clockwork v.2016.10.13",
+        "Nodes": [],
+        "Left": 271.0,
+        "Top": 351.0,
+        "Width": 0.0,
+        "Height": 0.0,
+        "FontSize": 36.0,
+        "InitialTop": 0.0,
+        "InitialHeight": 0.0,
+        "TextblockHeight": 0.0,
+        "Background": "#FFC1D676"
+      }
+    ],
+    "X": 268.0,
+    "Y": -135.0,
+    "Zoom": 1.0
+  }
+}

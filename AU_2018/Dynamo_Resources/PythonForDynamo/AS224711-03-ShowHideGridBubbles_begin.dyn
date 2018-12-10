@@ -1,0 +1,178 @@
+{
+  "Uuid": "0cee7846-332e-4ec0-9977-ec8f1321d203",
+  "IsCustomNode": false,
+  "Description": null,
+  "Name": "AS224711-02-ShowHideGridBubbles_begin",
+  "ElementResolver": {
+    "ResolutionMap": {}
+  },
+  "Inputs": [],
+  "Outputs": [],
+  "Nodes": [
+    {
+      "ConcreteType": "Dynamo.Graph.Nodes.CustomNodes.Function, DynamoCore",
+      "FunctionSignature": "9dba20d5-ee3a-4fad-ae88-9b859fff9cb7",
+      "FunctionType": "Graph",
+      "NodeType": "FunctionNode",
+      "Id": "46072e68e7314505986fe4ffb57035dc",
+      "Inputs": [
+        {
+          "Id": "87a3f0790bfd4cc8927384302b9fef20",
+          "Name": "refresh",
+          "Description": "bool\nDefault value : false",
+          "UsingDefaultValue": true,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        },
+        {
+          "Id": "ed952caef36c45679cbc99e151d8511d",
+          "Name": "Category",
+          "Description": "var[]..[]",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "aec039abbf214e7b8aa2b6b03274ed07",
+          "Name": "elements",
+          "Description": "return value",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Auto",
+      "Description": "This allows a multiple selection of elements of specified category."
+    },
+    {
+      "ConcreteType": "DSRevitNodesUI.Categories, DSRevitNodesUI",
+      "SelectedIndex": 233,
+      "NodeType": "ExtensionNode",
+      "Id": "f3df4d9bc720441f992f9d18fd3405a2",
+      "Inputs": [],
+      "Outputs": [
+        {
+          "Id": "d44f8d77120b461a99ada090382df513",
+          "Name": "Category",
+          "Description": "The selected Category.",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "All built-in categories."
+    },
+    {
+      "ConcreteType": "PythonNodeModels.PythonNode, PythonNodeModels",
+      "NodeType": "PythonScriptNode",
+      "Code": "# Python template for Revit\r\nimport clr\r\n\r\nclr.AddReference('RevitAPI')\r\nfrom Autodesk.Revit.DB import *\r\nfrom Autodesk.Revit.DB.Structure import *\r\n\r\nclr.AddReference('RevitAPIUI')\r\nfrom Autodesk.Revit.UI import *\r\n\r\nclr.AddReference('System')\r\nfrom System.Collections.Generic import List\r\n\r\nclr.AddReference('RevitNodes')\r\nimport Revit\r\nclr.ImportExtensions(Revit.GeometryConversion)\r\nclr.ImportExtensions(Revit.Elements)\r\n\r\nclr.AddReference('RevitServices')\r\nimport RevitServices\r\nfrom RevitServices.Persistence import DocumentManager\r\nfrom RevitServices.Transactions import TransactionManager\r\n\r\ndoc = DocumentManager.Instance.CurrentDBDocument\r\nuidoc=DocumentManager.Instance.CurrentUIApplication.ActiveUIDocument\r\n\r\n#Preparing input from dynamo to revit\r\nelement = UnwrapElement(IN[0])\r\n\r\n#Do some action in a Transaction\r\nTransactionManager.Instance.EnsureInTransaction(doc)\r\n\r\nTransactionManager.Instance.TransactionTaskDone()\r\n\r\nOUT = element",
+      "VariableInputPorts": true,
+      "Id": "7336e2f8fd194410a3e657d239fc44ed",
+      "Inputs": [
+        {
+          "Id": "3dc409cc8c9f4ecead36a4b9680083d0",
+          "Name": "IN[0]",
+          "Description": "Input #0",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Outputs": [
+        {
+          "Id": "03629946293a40d9b0c0912647fe3b1b",
+          "Name": "OUT",
+          "Description": "Result of the python script",
+          "UsingDefaultValue": false,
+          "Level": 2,
+          "UseLevels": false,
+          "KeepListStructure": false
+        }
+      ],
+      "Replication": "Disabled",
+      "Description": "Runs an embedded IronPython script."
+    }
+  ],
+  "Connectors": [
+    {
+      "Start": "aec039abbf214e7b8aa2b6b03274ed07",
+      "End": "3dc409cc8c9f4ecead36a4b9680083d0",
+      "Id": "3a509bba335a426f88f18ba30eb45c77"
+    },
+    {
+      "Start": "d44f8d77120b461a99ada090382df513",
+      "End": "ed952caef36c45679cbc99e151d8511d",
+      "Id": "13b80f91dcdd4d58a61db00813bd19f0"
+    }
+  ],
+  "Dependencies": [
+    "9dba20d5-ee3a-4fad-ae88-9b859fff9cb7"
+  ],
+  "Bindings": [],
+  "View": {
+    "Dynamo": {
+      "ScaleFactor": 1.0,
+      "HasRunWithoutCrash": true,
+      "IsVisibleInDynamoLibrary": true,
+      "Version": "2.0.1.5055",
+      "RunType": "Automatic",
+      "RunPeriod": "1000"
+    },
+    "Camera": {
+      "Name": "Background Preview",
+      "EyeX": -17.0,
+      "EyeY": 24.0,
+      "EyeZ": 50.0,
+      "LookX": 12.0,
+      "LookY": -13.0,
+      "LookZ": -58.0,
+      "UpX": 0.0,
+      "UpY": 1.0,
+      "UpZ": 0.0
+    },
+    "NodeViews": [
+      {
+        "ShowGeometry": true,
+        "Name": "Isolated Pick Model Elements",
+        "Id": "46072e68e7314505986fe4ffb57035dc",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 351.7624190064796,
+        "Y": 257.61987041036718
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Categories",
+        "Id": "f3df4d9bc720441f992f9d18fd3405a2",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": true,
+        "X": 119.0,
+        "Y": 283.61987041036718
+      },
+      {
+        "ShowGeometry": true,
+        "Name": "Python Script",
+        "Id": "7336e2f8fd194410a3e657d239fc44ed",
+        "IsSetAsInput": false,
+        "IsSetAsOutput": false,
+        "Excluded": false,
+        "X": 666.05468320430771,
+        "Y": 257.61987041036718
+      }
+    ],
+    "Annotations": [],
+    "X": 127.51767792590431,
+    "Y": 52.121824813443681,
+    "Zoom": 1.0036448041444719
+  }
+}
